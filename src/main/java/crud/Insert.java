@@ -15,11 +15,11 @@ public class Insert {
         MongoDBConection mongoDBConection = new MongoDBConection();
         BasicDBObject document = new BasicDBObject();
         document.put("username",user.getUsername());
-        document.put("password",user.getUsername());
-        document.put("fullName",user.getUsername());
-        document.put("phone",user.getUsername());
-        document.put("email",user.getUsername());
-        document.put("address",user.getUsername());
+        document.put("password",user.getPassword());
+        document.put("fullName",user.getFullName());
+        document.put("phone",user.getTel());
+        document.put("email",user.getEmail());
+        document.put("address",user.getAddress());
         mongoDBConection.insert(document, Constans.KEY_COLLECTION_USERS);
 
     }

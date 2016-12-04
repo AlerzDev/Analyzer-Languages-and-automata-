@@ -1,7 +1,9 @@
 package controller;
 
 import base.BaseFrameInterface;
+import crud.Find;
 import manager.NavigationManager;
+import model.User;
 import ui.Login;
 import utils.ViewUtils;
 
@@ -20,8 +22,7 @@ public class LoginController implements BaseFrameInterface {
     private Login      mLogin;
     private JTextField user;
     private JPasswordField password;
-    private JButton    login;
-    private JButton    register;
+    private Find       find;
 
     LoginController(Login l) {
 
@@ -34,12 +35,13 @@ public class LoginController implements BaseFrameInterface {
 
         user = mLogin.getUserField();
         password = mLogin.getPasswordField();
-        login    = mLogin.getLoginBtn();
-        register = mLogin.getRegisterBtn();
+        JButton login = mLogin.getLoginBtn();
+        JButton register = mLogin.getRegisterBtn();
 
         login.addActionListener(new ListenerLoginButton());
         register.addActionListener(new ListenerRegisterButton());
 
+        find = new Find();
     }
 
     public void success(String title, String msg) {
@@ -53,7 +55,16 @@ public class LoginController implements BaseFrameInterface {
     private class ListenerLoginButton implements ActionListener{
 
         public void actionPerformed(ActionEvent actionEvent) {
-            success("Exito","Ingreso Exitoso");
+            User u = new User();
+            u.setUsername(user.getText());
+            u.setPassword(password.getText());
+            if(find.findUserLogin(u)){
+                success("Exito","Ingreso exitoso");
+                NavigationManager.getInstance().loadAnalyzerFrame();
+
+            }else {
+                error("Error", "Existe u problema en los datos ingresados");
+            }
         }
     }
 
@@ -62,5 +73,7 @@ public class LoginController implements BaseFrameInterface {
         public void actionPerformed(ActionEvent actionEvent) {
             NavigationManager.getInstance().loadRegisterFrame();
         }
+
     }
+
 }
