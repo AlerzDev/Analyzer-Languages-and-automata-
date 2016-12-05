@@ -13,5 +13,6 @@
     <orderEntry type="library" name="Gradle: org.mongodb:mongodb-driver-core:3.4.0" level="project" />
     <orderEntry type="library" name="Gradle: org.mongodb:bson:3.4.0" level="project" />
     <orderEntry type="library" name="de.jflex:jflex-maven-plugin:1.6.1" level="project" />
+    <orderEntry type="library" name="java-cup-11b-runtime" level="project" />
   </component>
 </module>

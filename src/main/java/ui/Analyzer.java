@@ -25,20 +25,20 @@ public class Analyzer extends BaseFrame {
     private JPanel panelFields(){
 
         JPanel panel = new JPanel(new GridLayout(8,2));
-        text = new  String[]{"Nombre","Direccion","Correo","Celular","Curp","Nacimiento","Carrera"};
+        text = new  String[]{"Operacion"};
 
         labels = new JLabel[text.length];
         fields = new JTextField[text.length];
 
         for (int i = 0; i < text.length; i++) {
-            labels[i] = new JLabel(text[i]);
+            labels[i] = new JLabel("Operación");
             fields[i] = new JTextField(15);
             panel.add(labels[i]);
             panel.add(fields[i]);
         }
 
         clean = new JButton("Limpiar Campos");
-        check = new JButton("Validar campos");
+        check = new JButton("Validar y realizar operaciones");
         panel.add(clean);
         panel.add(check);
 
@@ -55,11 +55,11 @@ public class Analyzer extends BaseFrame {
     }
 
     protected String titleWindow() {
-        return "Analyzer Automatas 2";
+        return "AnalyzerActions Automatas 2";
     }
 
     protected int widthWindow() {
-        return 1000;
+        return 500;
     }
 
     protected int heightWindow() {

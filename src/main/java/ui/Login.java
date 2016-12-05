@@ -29,7 +29,7 @@ public class Login extends BaseFrame {
 
         JPanel panel  = new JPanel(new FlowLayout());
 
-        title         = new JLabel("Login Analyzer");
+        title         = new JLabel("Login AnalyzerActions");
         user          = new JLabel("Nombre de usuario");
         userField     = new JTextField(20);
         password      = new JLabel("Contraseña");

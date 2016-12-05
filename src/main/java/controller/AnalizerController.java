@@ -1,7 +1,9 @@
 package controller;
 
+import analyzer.AnalyzerActions;
 import base.BaseFrameInterface;
 import ui.Analyzer;
+import utils.ViewUtils;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -25,14 +27,7 @@ public class AnalizerController implements BaseFrameInterface{
 
     public AnalizerController(Analyzer analyzer){
         this.analyzer = analyzer;
-        String path = "/home/lemuz/IdeaProjects/Analizador(Automatas2)/src/main/java/controller/Lexer.flex";
-        generarLexer(path);
         initView();
-    }
-
-    private static void generarLexer(String path){
-        File file=new File(path);
-        jflex.Main.generate(file);
     }
 
     public void initView() {
@@ -45,17 +40,19 @@ public class AnalizerController implements BaseFrameInterface{
     }
 
     public void success(String title, String msg) {
-
+        ViewUtils.getInstance().showSuccessMessage(title,msg,analyzer);
     }
 
     public void error(String title, String msg) {
-
+        ViewUtils.getInstance().showErrorMessage(title,msg,analyzer);
     }
 
     private class ListenerClenaButton implements ActionListener{
 
         public void actionPerformed(ActionEvent actionEvent) {
-
+            for (JTextField field : fields) {
+                field.setText("");
+            }
         }
     }
 
@@ -63,53 +60,27 @@ public class AnalizerController implements BaseFrameInterface{
 
         public void actionPerformed(ActionEvent actionEvent) {
             try {
-                probarLexerFile();
-            } catch (IOException e) {
-                System.out.println(e.getMessage());
+                PrintWriter writer = new PrintWriter("test.txt", "UTF-8");
+                int x = 0;
+                for (JTextField field : fields) {
+                    if (!field.getText().equals("")) {
+                        writer.println(field.getText() + ";");
+                    } else {
+                        x++;
+                    }
+                }
+                writer.close();
+                if (x == 7) {
+                    error("Error", "No se a ingresado ninguna operación");
+                } else {
+                   String textResult = AnalyzerActions.getInstance().ejecutar();
+                   results.setText(textResult);
+                }
+            }catch (Exception e){
+                results.setText(e.getMessage());
             }
+
         }
     }
 
-    private void probarLexerFile() throws IOException {
-        File fichero = new File("fichero.txt");
-        PrintWriter writer;
-        try {
-            writer = new PrintWriter(fichero);
-            writer.print(fields[0].getText());
-            writer.print(fields[1].getText());
-            writer.close();
-        } catch (FileNotFoundException n) {
-            Logger.getLogger(AnalizerController.class.getName()).log(Level.SEVERE, null, n);
-        }
-        Reader reader = new BufferedReader(new FileReader("fichero.txt"));
-        Lexemas lexer = new Lexemas(reader);
-        String resultado = "";
-        while (true) {
-            Token token = lexer.yylex();
-
-            if (token == null) {
-                resultado = resultado + "EOF";
-                results.setText(resultado);
-                return;
-            }
-            switch (token) {
-                case Error:
-                    resultado = resultado + ("Error, simbolo no reconocido\n");
-                    break;
-                case Nombre:
-                    resultado = resultado + "TOKEN: " + token + " " + lexer.lexema + "\n";
-                    break;
-                case Direccion:
-                    resultado = resultado + "TOKEN: " + token + " " + lexer.lexema + "\n";
-                    break;
-                case Correo:
-                case Celular:
-                case Curp:
-                case Nacimiento:
-                case Carrera:
-                default:
-                    resultado = resultado + "TOKEN: " + token + "\n";
-            }
-        }
-    }
 }
